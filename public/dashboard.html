@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css"
+		integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.9.2/qs.min.js"
+		integrity="sha256-TDxXjkAUay70ae/QJBEpGKkpVslXaHHayklIVglFRT4=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="css/style.css" />
+
+	<title>Bidding-system</title>
+</head>
+
+<body>
+	<div style="max-width: none;" class="join-container">
+		<header class="join-header">
+			<h1><i class="fas fa-smile"></i>Bid-Room</h1>
+		</header>
+		<main  class="join-main">
+			<form action="chat.html">
+				<!-- <a href="/admin.html" class="btn">Dashboard</a><br> -->
+				<!-- <a href="/blogs" class="btn btn-success">Create Auction</a>
+                <button type="submit" class="btn">Delete Auction</button> -->
+				<!-- <div class="form-control">
+					<label for="username">Username</label>
+					<input type="text" name="username" id="username" placeholder="Enter username..." required />
+				</div> -->
+				<!-- <div class="form-control">
+					<label for="room">Room</label>
+					<select name="room" id="room">
+						<option value="Bid-room 1">Bid-room 1</option>
+						<option value="Bid-room 2">Bid-room 2</option>
+						<option value="Bid-room 3">Bid-room 3</option>
+						<option value="Bid-room 4">Bid-room 4</option>
+						<option value="Bid-room 5">Bid-room 5</option>
+						<option value="Bid-room 6">Bid-room 6</option>
+					</select>
+				</div> -->
+				<div id="HighestBidDetails">
+					
+
+				</div>
+				<div style="display: flex;" id="RoomCreate">
+
+				</div>
+
+			</form>
+		</main>
+	</div>
+</body>
+<script>
+
+function allblog() {
+    $.get('/allblogs', function (data) {
+      console.log(data);
+	  data.forEach(element => {
+		  $("#RoomCreate").append('<div class:"container"><div class:"row"><div style="margin: 2rem;border-color: white;border: solid;padding: 1rem;font-size: 2vw;width: fit-content;background-color: #007bff;border-radius:15px" class:"col-lg-6" onclick="'+
+			'enterbid(\''+element.Bidname+'\')'+
+			'">'+element.Bidname+'</div></div></div>')
+	  })
+	
+   
+    })
+  }
+	const { username } = Qs.parse(location.search, {
+		ignoreQueryPrefix: true,
+
+	});
+	console.log(username);
+	function enterbid(data) {
+
+		// var username = 	$('#username').val();
+		// console.log(username);
+		// if (username == undefined || username == ''){
+		// 	alert('Please enter username');
+
+		// 	return
+		// }
+		console.log(data);
+		window.location.href = './chat.html?username=' + username + '&room=' + data
+	}
+	$(document).ready(function () {
+		$('#HighestBidDetails').empty();
+		allblog()
+		$.get('/maxBid', function (data) {
+			console.log(data);
+			data.forEach(element => {
+				var a = new Date(element.msgDateTime)
+				$('#HighestBidDetails').append('<div class:" card col-lg-4 col-md-4 col-sm-12"><p style="margin: 2rem;border-color: white;border: solid;padding: 1rem;" onclick="enterbid(\'' + element.roomId +
+					'\')">'+
+					element.roomId+':-<br><br>'+
+					'Highest Bid of ' + element.roomId + ' is ' + element.bidPrice + ' bid by ' + element.username + ' at ' + a.toLocaleTimeString() + ' </p></div>')
+			});
+		})
+
+
+	});
+</script>
+
+</html>

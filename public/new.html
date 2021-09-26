@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <title>Blog</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">New Auction</h1>
+        <div>
+            <div class="form-group">
+                <label for="title">Bid-Room Name</label>
+                <input required type="text" name="title" id="title" class="form-control">
+            </div>
+
+            <a href="./admin.html" class="btn btn-secondary">Cancel</a>
+            <button type="submit" id="submitbtn" class="btn btn-primary">Save</button>
+        </div>
+    </div>
+</body>
+
+
+<script>
+    $('#submitbtn').click(async function () {
+         var title = $("#title").val();
+        var reqObj = {
+            "Bidname": title,
+            "Bidstatus":"active"
+
+        };
+        console.log(reqObj);
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: '/bid',
+            data: JSON.stringify(reqObj),
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+                window.location.href = './admin.html'
+            }
+         });
+     });
+
+</script>
+
+</html>
